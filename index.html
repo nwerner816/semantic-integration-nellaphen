@@ -57,6 +57,13 @@ var sentence = {
   }
 }
 
+//var start_sentence_instructions = { 
+  //type: jsPsychInstructions,
+ // pages: [
+//    'You will now repeat the sentence trial. Press SPACEBAR when you have read the sentence and want to move on to the next. Surprise questions will be added throughout.'
+  //]
+//}
+
 var random_attention_trials = jsPsych.randomization.sampleWithoutReplacement([...Array(35).keys()].map(x => x + 5), 3)
 
 console.log("random_attention_trials= " + random_attention_trials)
