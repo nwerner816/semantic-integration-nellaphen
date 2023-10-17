@@ -17,6 +17,10 @@
     <script>
         const jsPsych = initJsPsych();
 
+var condition_assignment = jsPsych.randomization.sampleWithoutReplacement(['1', '2'], 1)[0];
+  jsPsych.data.addProperties({
+    condition: condition_assignment
+  });
 
 var initial_instructions = {
   type: jsPsychInstructions,
