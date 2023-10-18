@@ -177,6 +177,102 @@ var priming_proc = {
   randomize_order: true
 }
 
+var age_gender_edu = {
+  type: jsPsychSurveyText,
+  questions: [
+    {prompt: "What is your age?", name: 'age'},
+    {prompt: "What is your gender?", name: 'gender'},
+    {prompt: "How many years of formal education have you had? (consider graduating high school to be 12 years)", name: 'education'}
+  ],
+  };
+
+  var race = {
+  type: jsPsychSurveyMultiSelect,
+  questions: [
+    {
+      prompt: "Please select all the racial categories that apply to you:", 
+      options: ["American Indian/Alaskan Native", "Asian", "Black/African American", "Native Hawaiian or Other Pacific Islander ", "White/Caucasian", "More than once race"," Other"], 
+      vertical: true,
+      required: true,
+      name: 'racial categories'
+    }, 
+    {
+      prompt: "Are you of Hispanic, Latino/a/x or of Spanish origin?", 
+      options: ["Yes", "No"], 
+      horizontal: true,
+      required: true,
+      name: 'Foods'
+    }
+  ], 
+  randomize_question_order: false
+};
+
+var hand = {
+  type: jsPsychSurveyMultiChoice,
+  questions: [
+    {
+      prompt: "What is your dominant hand?", 
+      name: 'hand',
+      options: ["Right", "Left", " Ambidextrous"], 
+      vertical: true,
+      required: true,
+    }
+  ], 
+};
+
+var timeofday = {
+  type: jsPsychSurveyMultiChoice,
+  questions: [
+    {
+      prompt: "Please indicate what time of the day you feel most alert:", 
+      name: 'hand',
+      options: ["Morning", "Afternoon", " Evening", "No differences"], 
+      vertical: true,
+      required: true,
+    }
+  ], 
+  randomize_question_order: false
+};
+
+var language = {
+  type: jsPsychSurveyMultiChoice,
+  questions: [
+    {
+      prompt: "Is English your first language?", 
+      name: 'language',
+      options: ["Yes", "No"], 
+      vertical: true,
+      required: true,
+    }
+  ], 
+  on_finish: function (data) {
+    var response = jsPsych.data.getLastTrialData().values()[0].language;
+    if (response === "No") {
+      jsPsych.addNodeToEndOfTimeline(language2);
+    }
+  }
+};
+
+var language2 = {
+  type: jsPsychSurveyText,
+  questions: [
+    {prompt: "What is your first language?", name: 'firstlanguage'},
+    {prompt: "At what age did you learn English?", name: 'agefirstlanguage'}
+  ]
+};
+
+var performance = {
+  type: jsPsychSurveyText,
+  questions: [
+    {prompt: "Is there anything else we should know about, which might have affected your performance during the experiment? (e.g., lack of sleep, feeling ill etc.)", name: 'performace'},
+  ],
+  };
+
+  var followup_proc = {
+  timeline: [age_gender_edu, race, hand, timeofday, language, language2, performance],
+  timeline_variables: practice_stimuli,
+  randomize_order: true
+}
 
 //jsPsych.run([initial_instructions, training_plus_association, priming_instructions, priming_proc])
 jsPsych.run([priming_proc]);
