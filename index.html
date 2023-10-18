@@ -270,11 +270,10 @@ var performance = {
 
   var followup_proc = {
   timeline: [age_gender_edu, race, hand, timeofday, language, language2, performance],
-  timeline_variables: practice_stimuli,
   randomize_order: true
 }
 
 //jsPsych.run([initial_instructions, training_plus_association, priming_instructions, priming_proc])
-jsPsych.run([priming_proc]);
+jsPsych.run([priming_proc, followup_proc]);
     </script>
 </html>
