@@ -1,4 +1,4 @@
-var sentences = [
+var sentences1 = [
   {
     "Triad": 1,
     "Pair": "foobly apple",

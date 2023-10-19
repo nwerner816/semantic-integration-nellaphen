@@ -15,9 +15,15 @@
     </head>
     <body></body>
     <script>
-        const jsPsych = initJsPsych();
+        const jsPsych = initJsPsych(
+        {
+                    on_finish: function(data) {
+                    jsPsych.data.displayData();
+                    }
+                }   
+            );
 
-var condition_assignment = jsPsych.randomization.sampleWithoutReplacement(['1', '2'], 1)[0];
+var condition_assignment = (jsPsych.randomization.randomInt(1,2));
   jsPsych.data.addProperties({
     condition: condition_assignment
   });
@@ -89,7 +95,13 @@ var attention_conditional = {
 
 var training_procedure = {
   timeline: [sentence, attention_conditional],
-  timeline_variables: sentences,
+  timeline_variables: function(data) {
+    if(condition == 1) {
+      sentences1;}
+      else {
+        sentences2;
+      }
+    },
   randomize_order: true
 }
 
@@ -274,6 +286,6 @@ var performance = {
 }
 
 //jsPsych.run([initial_instructions, training_plus_association, priming_instructions, priming_proc])
-jsPsych.run([priming_proc, followup_proc]);
+jsPsych.run([condition_assignment, training_procedure]);
     </script>
 </html>
