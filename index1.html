@@ -49,7 +49,7 @@ var condition = jsPsych.randomization.shuffle(conditions)[0];
   var preload = {
     type:jsPsychPreload,
     auto_preload: true,
-    images: ['horseapple.png', 'applehorse.png']
+    images: ['horseapple.png', 'applehorse.png', 'gorillamelon.png', 'melongorilla.png']
   }
 
 var initial_instructions = {
@@ -391,7 +391,7 @@ var thank_you = {
 }
 
 
-jsPsych.run([conditions, condition, training_procedure])
+jsPsych.run([training_procedure])
 //jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, thank_you]);
     </script>
 </html>
