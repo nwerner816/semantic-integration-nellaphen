@@ -24,6 +24,11 @@
             }
             }
         );
+// Define an array of conditions (e.g., 'conditionA' and 'conditionB').
+var conditions = ['conditionA', 'conditionB'];
+
+// Randomly select one of the conditions for the participant.
+var condition = jsPsych.randomization.shuffle(conditions)[0];
 
   //generate random ID
 
@@ -146,7 +151,13 @@ var attention_conditional = {
 
 var training_procedure = {
   timeline: [sentence, attention_conditional],
-  timeline_variables: sentences,
+  timeline_variables: function(){
+    if (condition === 'conditionA') {  
+      sentence1} 
+  else if (condition === 'conditionB') {
+    sentence2
+  }
+},
   randomize_order: true
 }
 
