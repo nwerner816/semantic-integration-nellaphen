@@ -24,10 +24,9 @@
             }
             }
         );
-// Define an array of conditions (e.g., 'conditionA' and 'conditionB').
+
 var conditions = ['conditionA', 'conditionB'];
 
-// Randomly select one of the conditions for the participant.
 var condition = jsPsych.randomization.shuffle(conditions)[0];
 
   //generate random ID
@@ -38,12 +37,8 @@ var condition = jsPsych.randomization.shuffle(conditions)[0];
   //tag all trials with id
 
   jsPsych.data.addProperties({
-    ID: id
-  });
-
-  var condition_assignment = (jsPsych.randomization.randomInt(1,2));
-  jsPsych.data.addProperties({
-    condition: condition_assignment
+    ID: id,
+    condition: condition
   });
 
   var preload = {
@@ -389,7 +384,7 @@ var thank_you = {
 }
 
 
-jsPsych.run([followup_proc])
+jsPsych.run([conditions, condition, training_procedure])
 //jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, thank_you]);
     </script>
 </html>
