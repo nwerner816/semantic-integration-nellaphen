@@ -1,4 +1,4 @@
-var practice_stimuli = [
+var practice_stimuli1 = [
     {
       "block_number": "practice",
       "triad": 1,
@@ -104,7 +104,7 @@ var practice_stimuli = [
       "correct_key": "L"
     },
 ]
-var test_stimuli = [
+var test_stimuli1 = [
     {
       "block_number": 1,
       "triad": 1,

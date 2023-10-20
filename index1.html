@@ -111,7 +111,7 @@ var sentence = {
 var random_attention_trials = jsPsych.randomization.sampleWithoutReplacement([...Array(35).keys()].map(x => x + 5),3)
 
 console.log("random_attention_trials= " + random_attention_trials)
-/*
+
 var attention = {
     type: jsPsychSurveyText,
     questions: [
@@ -150,8 +150,6 @@ var attention_conditional = {
   }
 }
 
-*/
-
 var training_procedure = {
   timeline: [sentence],
   timeline_variables: get_test_stimuli(CONDITION),
@@ -166,8 +164,6 @@ function get_test_stimuli(condition_number){
     return sentences2
   }
 }
-
-/*
 
 var association = {
     type: jsPsychSurveyText,
@@ -281,15 +277,33 @@ var priming_feedback = {
 
 var practice_proc = {
   timeline: [fixation, image, prime, target, priming_feedback],
-  timeline_variables: practice_stimuli,
+  timeline_variables: get_test_stimuli(CONDITION),
   randomize_order: true
+}
+
+function get_test_stimuli(condition_number){
+  if(condition_number == 1){
+    return practice_stimuli1
+  }
+  else{
+    return practice_stimuli2
+  }
 }
 
 var priming_proc = {
   timeline: [fixation, image, prime, target, priming_feedback],
-  timeline_variables: test_stimuli,
+  timeline_variables: get_test_stimuli(CONDITION),
   randomize_order: true,
   repetitions: 2
+}
+
+function get_test_stimuli(condition_number){
+  if(condition_number == 1){
+    return test_stimuli1
+  }
+  else{
+    return test_stimuli2
+  }
 }
 
 var age_gender_edu = {
@@ -396,9 +410,8 @@ var thank_you = {
     typeoftrial: 'thank_you'
   },
 }
-*/
 
-jsPsych.run([training_procedure])
-//jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, thank_you]);
+//jsPsych.run([training_procedure])
+jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, thank_you]);
     </script>
 </html>
