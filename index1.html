@@ -8,7 +8,7 @@
         <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.2"></script>
         <script src="jspsych/modified-image-plugins.js"></script>
         <script src="sentences2.js"></script>
-        <script src="association2.js"></script>
+        <script src="association.js"></script>
         <script src="priming2.js"></script>
         <script src="https://unpkg.com/@jspsych/plugin-survey-multi-select@1.1.2"></script>
         <script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@1.1.2"></script>
@@ -26,7 +26,7 @@
             }
             }
         );
-
+//assign conditions
 var conditions = ['conditionA', 'conditionB'];
 
 var condition = jsPsych.randomization.shuffle(conditions)[0];
@@ -150,9 +150,9 @@ var training_procedure = {
   timeline: [sentence, attention_conditional],
   timeline_variables: function(){
     if (condition === 'conditionA') {  
-      sentences1
+       sentences1
     } 
-  else if (condition === 'conditionB') {
+  else {
     sentences2
   }
 },
@@ -388,7 +388,7 @@ var thank_you = {
 }
 
 
-jsPsych.run([conditions, condition, training_procedure, followup_proc])
+jsPsych.run([conditions, condition, training_procedure])
 //jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, thank_you]);
     </script>
 </html>
