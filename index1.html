@@ -30,9 +30,10 @@
         );
 
 //assign conditions
-var conditions = ['conditionA', 'conditionB'];
+var conditions = [1, 2];
 
-var condition = jsPsych.randomization.shuffle(conditions)[0];
+var CONDITION = jsPsych.randomization.shuffle(conditions)[0];
+console.log("CONDITION=", CONDITION)
 
   //generate random ID
 
@@ -43,7 +44,7 @@ var condition = jsPsych.randomization.shuffle(conditions)[0];
 
   jsPsych.data.addProperties({
     ID: id,
-    condition: condition
+    condition: CONDITION
   });
 
   var preload = {
@@ -151,15 +152,17 @@ var attention_conditional = {
 
 var training_procedure = {
   timeline: [sentence, attention_conditional],
-  timeline_variables: function(){
-    if (condition === 'conditionA') {  
-       sentences1
-    } 
-  else if (condition === 'conditionB') {
-    sentences2
-  }
-},
+  timeline_variables: get_test_stimuli(CONDITION),
   randomize_order: true
+}
+
+function get_test_stimuli(condition_number){
+  if(condition_number == 1){
+    return sentences1
+  }
+  else{
+    return sentences2
+  }
 }
 
 var association = {
@@ -408,7 +411,7 @@ var thank_you = {
   },
 }
 
-//jsPsych.run([training_procedure])
-jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, thank_you]);
+jsPsych.run([training_procedure])
+//jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, thank_you]);
     </script>
 </html>
