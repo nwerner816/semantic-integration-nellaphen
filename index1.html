@@ -108,6 +108,15 @@ var sentence = {
   }
 }
 
+function get_test_stimuli(condition_number){
+  if(condition_number == 1){
+    return sentences1
+  }
+  else{
+    return sentences2
+  }
+}
+
 var random_attention_trials = jsPsych.randomization.sampleWithoutReplacement([...Array(35).keys()].map(x => x + 5),3)
 
 console.log("random_attention_trials= " + random_attention_trials)
@@ -156,15 +165,6 @@ var training_procedure = {
   randomize_order: true
 }
 
-function get_test_stimuli(condition_number){
-  if(condition_number == 1){
-    return sentences1
-  }
-  else{
-    return sentences2
-  }
-}
-
 var association = {
     type: jsPsychSurveyText,
     preamble: 'Type in the first word that comes to mind when you see the word below:',
@@ -189,6 +189,7 @@ var training_plus_association = {
   timeline: [training_procedure, association_instructions, association_procedure],
   repetitions: 3
 }
+
 
 var slow_experiment_trial = {
   type: jsPsychHtmlKeyboardResponse,
@@ -411,7 +412,7 @@ var thank_you = {
   },
 }
 
-//jsPsych.run([])
-jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, thank_you]);
+jsPsych.run([training_plus_association])
+//jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, thank_you]);
     </script>
 </html>
