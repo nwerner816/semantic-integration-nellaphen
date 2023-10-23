@@ -69,7 +69,7 @@ var initial_instructions = {
 var association_instructions = {
   type: jsPsychInstructions,
   pages: [
-  'You are done with the first part! <br><br>In this segment, you will be asked to type in the first word that comes to your mind when you read a given word. <br><br>Keep in mind that in this game, you can only use the words you read about in the reading session. <br><br>Type in your answer and press enter when you are ready for the next one.',
+  'In this next segment, you will be asked to type in the first word that comes to your mind when you read a given word. <br><br>Keep in mind that in this game, you can only use the words you read about in the reading session. <br><br>Type in your answer and press enter when you are ready for the next one.',
   ],
   show_clickable_nav: true,
   data: {
@@ -152,10 +152,10 @@ var attention_conditional = {
 
 var training_procedure = {
   timeline: [sentence, attention_conditional],
-  timeline_variables: get_test_stimuli(CONDITION),
+  timeline_variables: get_training_stimuli(CONDITION),
   randomize_order: true
 }
-function get_test_stimuli(condition_number){
+function get_training_stimuli(condition_number){
   if(condition_number == 1){
     return sentences1
   }
@@ -277,11 +277,11 @@ var priming_feedback = {
 
 var practice_proc = {
   timeline: [fixation, image, prime, target, priming_feedback],
-  timeline_variables: get_test_stimuli(CONDITION),
+  timeline_variables: get_practice_stimuli(CONDITION),
   randomize_order: true
 }
 
-function get_test_stimuli(condition_number){
+function get_practice_stimuli(condition_number){
   if(condition_number == 1){
     return practice_stimuli1
   }
@@ -411,7 +411,7 @@ var thank_you = {
   },
 }
 
-jsPsych.run([training_plus_association])
-//jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, thank_you]);
+//jsPsych.run([training_plus_association])
+jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, thank_you]);
     </script>
 </html>
