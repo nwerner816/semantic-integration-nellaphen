@@ -108,15 +108,6 @@ var sentence = {
   }
 }
 
-function get_test_stimuli(condition_number){
-  if(condition_number == 1){
-    return sentences1
-  }
-  else{
-    return sentences2
-  }
-}
-
 var random_attention_trials = jsPsych.randomization.sampleWithoutReplacement([...Array(35).keys()].map(x => x + 5),3)
 
 console.log("random_attention_trials= " + random_attention_trials)
@@ -163,6 +154,14 @@ var training_procedure = {
   timeline: [sentence, attention_conditional],
   timeline_variables: get_test_stimuli(CONDITION),
   randomize_order: true
+}
+function get_test_stimuli(condition_number){
+  if(condition_number == 1){
+    return sentences1
+  }
+  else{
+    return sentences2
+  }
 }
 
 var association = {
