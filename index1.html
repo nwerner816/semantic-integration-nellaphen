@@ -306,6 +306,17 @@ function get_test_stimuli(condition_number){
   }
 }
 
+var demographicquestions = {
+  type: jsPsychInstructions,
+  pages: [
+  '<br>We will now ask you some demographic questions<br>',
+  ],
+  show_clickable_nav: true,
+  data: {
+        typeoftrial: 'instructions',
+  }
+}
+
 var age_gender_edu = {
   type: jsPsychSurveyText,
   questions: [
@@ -399,7 +410,7 @@ var performance1 = {
   };
   
 var followup_proc = {
-  timeline: [age_gender_edu, race, hand, timeofday, language, performance1],
+  timeline: [demographicquestions, age_gender_edu, race, hand, timeofday, language, performance1],
   randomize_order: true
 }
 
@@ -412,6 +423,6 @@ var thank_you = {
 }
 
 //jsPsych.run([training_plus_association])
-jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, thank_you]);
+jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, followup_proc, thank_you]);
     </script>
 </html>
