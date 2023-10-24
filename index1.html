@@ -151,7 +151,7 @@ var attention_conditional = {
 }
 
 var training_procedure = {
-  timeline: [sentence, attention_conditional],
+  timeline: [preload, sentence, attention_conditional],
   timeline_variables: get_training_stimuli(CONDITION),
   randomize_order: true
 }
@@ -276,7 +276,7 @@ var priming_feedback = {
 }
 
 var practice_proc = {
-  timeline: [fixation, image, prime, target, priming_feedback],
+  timeline: [preload, fixation, image, prime, target, priming_feedback],
   timeline_variables: get_practice_stimuli(CONDITION),
   randomize_order: true
 }
@@ -411,7 +411,7 @@ var thank_you = {
   },
 }
 
-//jsPsych.run([training_plus_association])
-jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, thank_you]);
+jsPsych.run([practice_proc, priming_proc])
+//jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, thank_you]);
     </script>
 </html>
