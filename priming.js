@@ -9,7 +9,7 @@ var practice_stimuli1 = [
       "type": "novel",
       "relatedness": "novel",
       "correct_response": 1,
-      "image_path": "melonhorse.png",
+      "image_path": "applehorse.png",
       "correct_key": "A"
     },
     {
