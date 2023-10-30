@@ -24,7 +24,7 @@
         const jsPsych = initJsPsych(
           {
             on_finish: function(data) {
-               jsPsych.data.displayData();
+               //jsPsych.data.displayData();
             }
             }
         );
@@ -57,14 +57,25 @@ var initial_instructions = {
   type: jsPsychInstructions,
   pages: [
     'How do we learn new words? <br><br>Most of the words we know we learned spontaneously, like when hearing a novel word while listening to someone speaking, watching TV, or while reading.<br><br> In this study, your task will be to simply read sentences containing new words. After the reading session, we will ask you to use these novel words in a word game. <br><br>This experiment has three blocks. Each block has reading and testing session.<br><br> Are you ready to start?',
-    'We will present one sentence at a time. <br><br>Read them carefully. When you are ready, press space bar for the next sentence. <br><br>In order to make sure you are reading carefully, there will be surprise questions during the reading session. <br><br>You will be asked to type in the novel words from the last sentence you read. <br><br>Minor spelling mistakes will be tolerated. Type in your answer and press enter when you are ready to move on to the next sentence.',
-    'You will now read the sentences. <br> Press SPACEBAR when you have read the sentence and want to move on to the next.'
+    'We will present one sentence at a time. <br><br>Read them carefully. When you are ready, press space bar for the next sentence. <br><br>In order to make sure you are reading carefully, there will be surprise questions during the reading session. <br><br>You will be asked to type in the novel words from the last sentence you read. <br><br>Minor spelling mistakes will be tolerated. Type in your answer and press enter when you are ready to move on to the next sentence.'
   ],
   show_clickable_nav: true,
   data: {
         typeoftrial: 'instructions',
   }
 }
+
+var training_instructions = {
+  type: jsPsychInstructions,
+  pages: [
+  'In this segment, you will read sentences. <br><br>Press SPACEBAR when you have read the sentence and want to move on to the next.'
+  ],
+  show_clickable_nav: true,
+  data: {
+        typeoftrial: 'instructions',
+  }
+}
+
 
 var association_instructions = {
   type: jsPsychInstructions,
@@ -185,7 +196,7 @@ var association_procedure = {
 }
 
 var training_plus_association = {
-  timeline: [training_procedure, association_instructions, association_procedure],
+  timeline: [training_instructions, training_procedure, association_instructions, association_procedure],
   repetitions: 3
 }
 
@@ -309,7 +320,7 @@ function get_test_stimuli(condition_number){
 var demographicquestions = {
   type: jsPsychInstructions,
   pages: [
-  '<br>We will now ask you some demographic questions<br>',
+  '<br>You have completed the main part of the experiment! <br><br>We will now ask you some demographic questions. <br><br>Please respond to the best of your ability and comfort.<br>',
   ],
   show_clickable_nav: true,
   data: {
@@ -423,13 +434,13 @@ var followup_proc = {
 
 var thank_you = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: 'Thank you! You can press any key to end the experiment.',
+  stimulus: 'Thank you! You please press any key to end the experiment.',
   data: {
     typeoftrial: 'thank_you'
   },
 }
 
-//jsPsych.run([training_plus_association])
+//jsPsych.run([priming_proc])
 jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, followup_proc, thank_you]);
     </script>
 </html>
