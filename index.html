@@ -386,6 +386,13 @@ var language = {
     }
   ], 
 
+  no_lang = {
+    timeline: [no_lang_questions],
+    conditional_function: fuction () {
+      var last_trial_data = jsPsych.data.get().filter({typeoftrial: 'demo_language'}).last(1)***
+    }
+  }
+
   
   on_finish: function(data) {
     if (data.response['language'] && data.response['language'] === 'No') {
