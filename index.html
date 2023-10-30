@@ -6,6 +6,7 @@
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
         <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" />
         <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.2"></script>
         <script src="jspsych/modified-image-plugins.js"></script>
         <script src="sentences.js"></script>
         <script src="sentences2.js"></script>
@@ -386,39 +387,41 @@ var timeofday = {
 };
 
 var language = {
-  type: jsPsychSurveyMultiChoice,
-  questions: [
-    {
-      prompt: "Is English your first language?", 
-      name: 'language',
-      options: ["Yes", "No"], 
-      vertical: true,
-      required: true,
-    }
-  ], 
+  type: jsPsychHtmlButtonResponse,
+  stimulus: "Is English your first language?", 
+  choices: ["Yes", "No"], 
+  name: 'language',
+  data: {
+    typeoftrial: "demo_language",
+  },
+}
 
-  no_lang = {
-    timeline: [no_lang_questions],
-    conditional_function: fuction () {
-      var last_trial_data = jsPsych.data.get().filter({typeoftrial: 'demo_language'}).last(1)***
+var no_lang1 = {
+    type: jsPsychSurveyText,
+    questions: [{prompt: "What is your first language?", required: true}]
+  }
+var no_lang2 = {
+  type: jsPsychSurveyText,
+  questions: [{prompt: "What age did you learn English?", required: true}]
+}
+  
+var no_lang = {
+  timeline: [no_lang1, no_lang2],
+  conditional_function: function () {
+    var last_trial_data = jsPsych.data.get().filter({typeoftrial: 'demo_language'}).last(1).values()[0];
+    console.log("last_trial_data=", last_trial_data);
+    if (last_trial_data.response == 1) {
+      return true
+    }
+    else {
+      return false
     }
   }
-
-  
-  on_finish: function(data) {
-    if (data.response['language'] && data.response['language'] === 'No') {
-        jsPsych.addNodeToEndOfTimeline(language2);
-    }
 }
-};
 
-var language2 = {
-  type: jsPsychSurveyText,
-  questions: [
-    {prompt: "What is your first language?", name: 'firstlanguage'},
-    {prompt: "At what age did you learn English?", name: 'agefirstlanguage'}
-  ]
-};
+var language_ = {
+  timeline: [language, no_lang]
+}
 
 var performance1 = {
   type: jsPsychSurveyText,
@@ -428,7 +431,7 @@ var performance1 = {
   };
   
 var followup_proc = {
-  timeline: [demographicquestions, age_gender_edu, race, hand, timeofday, language, performance1],
+  timeline: [demographicquestions, age_gender_edu, race, hand, timeofday, language_, performance1],
   randomize_order: true
 }
 
@@ -441,6 +444,7 @@ var thank_you = {
 }
 
 //jsPsych.run([priming_proc])
-jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, followup_proc, thank_you]);
+//jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, followup_proc, thank_you]);
+jsPsych.run([followup_proc, thank_you]);
     </script>
 </html>
