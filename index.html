@@ -25,7 +25,7 @@
         const jsPsych = initJsPsych(
           {
             on_finish: function(data) {
-               //jsPsych.data.displayData();
+               jsPsych.data.displayData();
             }
             }
         );
@@ -325,7 +325,7 @@ var demographicquestions = {
   ],
   show_clickable_nav: true,
   data: {
-        typeoftrial: 'instructions',
+        typeoftrial: 'demo_instructions',
   }
 }
 
@@ -336,6 +336,9 @@ var age_gender_edu = {
     {prompt: "What is your gender?", name: 'gender', required: true},
     {prompt: "How many years of formal education have you had? (consider graduating high school to be 12 years)", name: 'education', required: true}
   ],
+  data: {
+        typeoftrial: 'demo_age_gender_edu',
+  }
   };
 
   var race = {
@@ -356,7 +359,10 @@ var age_gender_edu = {
       name: 'origin'
     }
   ], 
-  randomize_question_order: false
+  randomize_question_order: false,
+  data: {
+        typeoftrial: 'demo_race',
+  }
 };
 
 var hand = {
@@ -370,6 +376,9 @@ var hand = {
       required: true,
     }
   ], 
+  data: {
+        typeoftrial: 'demo_hand',
+  }
 };
 
 var timeofday = {
@@ -378,12 +387,15 @@ var timeofday = {
     {
       prompt: "Please indicate what time of the day you feel most alert:", 
       name: 'time',
-      options: ["Morning", "Afternoon", " Evening", "No differences"], 
+      options: ["Morning", "Afternoon", "Evening", "No differences"], 
       vertical: true,
       required: true,
     }
   ], 
-  randomize_question_order: false
+  randomize_question_order: false,
+  data: {
+        typeoftrial: 'demo_time_of_day',
+  }
 };
 
 var language = {
@@ -398,11 +410,17 @@ var language = {
 
 var no_lang1 = {
     type: jsPsychSurveyText,
-    questions: [{prompt: "What is your first language?", required: true}]
-  }
+    questions: [{prompt: "What is your first language?", required: true}],
+  data: {
+        typeoftrial: 'demo_first_language'
+  }}
+
 var no_lang2 = {
   type: jsPsychSurveyText,
-  questions: [{prompt: "What age did you learn English?", required: true}]
+  questions: [{prompt: "What age did you learn English?", required: true}],
+  data:{
+        typeoftrial: 'demo_age_language'
+  }
 }
   
 var no_lang = {
@@ -428,6 +446,9 @@ var performance1 = {
   questions: [
     {prompt: "Is there anything else we should know about, which might have affected your performance during the experiment? (e.g., lack of sleep, feeling ill etc.)", name: 'performace'},
   ],
+  data: {
+        typeoftrial: 'demo_performance',
+  }
   };
   
 var followup_proc = {
