@@ -25,7 +25,7 @@
         const jsPsych = initJsPsych(
           {
             on_finish: function(data) {
-               jsPsych.data.displayData();
+               //jsPsych.data.displayData();
             }
             }
         );
@@ -92,7 +92,7 @@ var association_instructions = {
 var priming_instructions = {
   type: jsPsychInstructions,
   pages: [
-    'This is our final game. <br><br>You will be presented with slides showing an apple and a horse. <br><br>Your task will be to respond as quickly as possible, on which side of the screen the apple or the horse is shown. <br><br>On the same screen, with pictures, two words will be presented. Read the first word, but respond in accordance with the second word. <br><br>For example, if you see words “boff” and “apple”, respond where the apple is. <br><br>If you see words “boff” and “horse”, respond where the horse is.',
+    'This is our final game. <br><br>You will be presented with slides showing two images. <br><br>Your task will be to respond as quickly as possible, on which side of the screen the target image is. <br><br>On the same screen, with pictures, two words will be presented. Read the first word, but respond in accordance with the second word. <br><br>For example, if you see words “boff” and “apple”, respond where the apple is. <br><br>If you see words “boff” and “horse”, respond where the horse is.',
     'You will press A if you want to choose the picture on the left and L if you want to choose the picture on the right'
   ],
   show_clickable_nav: true,
@@ -351,17 +351,26 @@ var age_gender_edu = {
       required: true,
       name: 'racial categories'
     }, 
+  ], 
+  randomize_question_order: false,
+  data: {
+        typeoftrial: 'demo_race',
+  }
+};
+
+var ethnicity = {
+  type: jsPsychSurveyMultiChoice,
+  questions: [
     {
       prompt: "Are you of Hispanic, Latino/a/x or of Spanish origin?", 
       options: ["Yes", "No"], 
       horizontal: true,
       required: true,
-      name: 'origin'
     }
   ], 
   randomize_question_order: false,
   data: {
-        typeoftrial: 'demo_race',
+        typeoftrial: 'demo_ethnicity',
   }
 };
 
@@ -452,7 +461,7 @@ var performance1 = {
   };
   
 var followup_proc = {
-  timeline: [demographicquestions, age_gender_edu, race, hand, timeofday, language_, performance1],
+  timeline: [demographicquestions, age_gender_edu, race, ethnicity, hand, timeofday, language_, performance1],
   randomize_order: true
 }
 
@@ -464,8 +473,6 @@ var thank_you = {
   },
 }
 
-//jsPsych.run([priming_proc])
-//jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, followup_proc, thank_you]);
-jsPsych.run([followup_proc, thank_you]);
+jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, followup_proc, thank_you]);
     </script>
 </html>
