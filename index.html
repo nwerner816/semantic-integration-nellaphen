@@ -275,6 +275,25 @@ var target = {
   }
 }
 
+var practice_feedback = { 
+ type: jsPsychHtmlKeyboardResponse,
+ stimulus: function(){
+  var rt = jsPsych.data.get().last(1).values()[0].rt;
+  if (rt > 800 & jsPsych.data.get().last(1).values()[0].correct == false){
+    return "<span style= 'color:red'>Incorrect </span> and <b>too slow</b>! <br><br> Please try to respond faster."
+  } else if (rt > 800 & jsPsych.data.get().last(1).values()[0].correct == true){
+    return "Correct but <b>too slow</b>! <br><br> Please try to respond faster."
+  }
+  else if (jsPsych.data.get().last(1).values()[0].correct == false & rt < 800){
+    return "<span style= 'color:red'>Incorrect!</span> <br><br> Please remember the correct response."
+  } else {
+    return "Correct!";
+  }
+ },
+ choices:"NO_KEYS",
+ trial_duration: 1000
+}
+
 var priming_feedback = { 
   timeline: [slow_experiment_trial],
   conditional_function: function(){
@@ -288,7 +307,7 @@ var priming_feedback = {
 }
 
 var practice_proc = {
-  timeline: [fixation, image, prime, target, priming_feedback],
+  timeline: [fixation, image, prime, target, practice_feedback],
   timeline_variables: get_practice_stimuli(CONDITION),
   randomize_order: true
 }
@@ -472,7 +491,6 @@ var thank_you = {
     typeoftrial: 'thank_you'
   },
 }
-
 jsPsych.run([preload, initial_instructions, training_plus_association, priming_instructions, practice_proc, priming_proc, followup_proc, thank_you]);
     </script>
 </html>
