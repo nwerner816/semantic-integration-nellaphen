@@ -178,7 +178,7 @@ function get_training_stimuli(condition_number){
 
 var association = {
     type: jsPsychSurveyText,
-    preamble: 'Type in the first word that comes to mind when you see the word below:',
+    preamble: 'Type in the first word that comes to mind when you see the word below. <br> <br> Reminder: your response must be a word you read about in the reading section.',
     questions: [{prompt: jsPsych.timelineVariable('cue')}],
   data: {
         typeoftrial: 'association',
