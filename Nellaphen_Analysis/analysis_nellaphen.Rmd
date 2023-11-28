@@ -2,7 +2,7 @@
 title: "Milestone 7_Analysis_Nellaphen"
 output: html_notebook
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 #install packages
@@ -26,6 +26,10 @@ library(lmerTest)
 ```
 
 #Class Data imported
+
+```{r}
+nellaphen_data = read_csv("semantic-integration-nellaphen (2).csv")
+```
 
 #Inspect data
 ```{r}
