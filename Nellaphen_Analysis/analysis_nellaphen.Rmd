@@ -49,18 +49,19 @@ nellaphen_data %>% group_by(sona_id) %>% count()
 
 #Which columns contain your independent variable(s) and dependent variable(s)?
 
-# independent variable: *******
+# independent variable: type, relatedness, alliterative 
 #dependent variables: rt (response time)
 
 #How many levels do your independent variables have?
-#*************
+#type: 2 (shared / direct / novel)
+#relatedness: 2 (related / unrelated) 
+#alliterative: 2 (alliterative [1] / non-alliterative [0])
 
 ```
 
 
 # Basic descriptives
 ```{r}
-
 
 attention_trial_data = nellaphen_data %>%
   filter(typeoftrial == 'attention')
