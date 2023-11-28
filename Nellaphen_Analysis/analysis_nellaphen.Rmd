@@ -84,6 +84,7 @@ association_trial_data = nellaphen_data %>%
 ggplot(data = association_trial_data)+
   geom_histogram(mapping = aes(x = as.numeric(rt)))
 
+
 ```
 
 
