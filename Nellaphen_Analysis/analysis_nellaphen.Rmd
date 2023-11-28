@@ -63,13 +63,13 @@ nellaphen_data %>% group_by(sona_id) %>% count()
 # Basic descriptives
 ```{r}
 #What is the average accuracy in your experiment? What is the standard deviation of the accuracy?
-mean_experiment_acc = attention_trial_data %>%
-  summarize(mean_accuracy = mean(revised_correct), sd_accuracy = sd(revised_correct))
-
 attention_trial_data = nellaphen_data %>%
   filter(typeoftrial == 'attention')
 
 attention_trial_data$revised_correct = as.numeric(attention_trial_data$revised_correct)
+
+mean_experiment_acc = attention_trial_data %>%
+  summarize(mean_accuracy = mean(revised_correct), sd_accuracy = sd(revised_correct))
 
 #Calculate the mean accuracy for each subject
 subject_acc = attention_trial_data %>%
@@ -101,9 +101,44 @@ ggplot(data = target_trial_data)+
 # This is not correct below -- but working on it
 
 subject_condition_rt = nellaphen_data %>%
+  filter(typeoftrial == 'target') %>%
+  mutate(rt = as.numeric(rt)) %>%
   group_by(sona_id, type, relatedness) %>%
   summarize(mean_response_rt = mean(rt))
 
 ```
 
+# Bar Plots for IVs
 
+```{r}
+## prime type plot
+prime_rt = nellaphen_data %>%
+  filter(typeoftrial == 'target') %>%
+  mutate(rt = as.numeric(rt)) %>%
+  group_by(type, relatedness) %>%
+  summarize(mean_response_rt = mean(rt))
+
+ggplot(data = prime_rt) +
+  geom_col(mapping = aes(x = type, y = mean_response_rt, fill = relatedness), position = "dodge") +
+  theme_bw()+
+  labs(title = "plot of RTs", x = "Prime", y = "Mean RT (ms)")+
+  scale_fill_grey()
+
+## alliteration plot
+alliteration_rt = nellaphen_data %>%
+  filter(typeoftrial == 'target', type == 'shared', relatedness == 'related') %>%
+  mutate(rt = as.numeric(rt), condition = as.character(condition)) %>%
+  group_by(condition) %>%
+  summarize(mean_response_rt = mean(rt))
+
+ggplot(data = alliteration_rt) +
+  geom_col(mapping = aes(x = condition, y = mean_response_rt), position = "dodge") +
+  theme_bw()+
+  labs(title = "plot of alliteration RTs", x = "Condition", y = "Mean RT (ms)")+
+  scale_fill_grey()
+```
+We seem to see little difference in rt for direct and shared primes, although both result in faster rts than novel words. Additionally, related words seem to result in faster rts than unrelated words.
+
+For our alliteration IV, we see that participants in condition 2 (alliterative primes) have a slightly faster average rt than those in condition 1 (non-alliterative primes).
+
+# Inferential Statistics
