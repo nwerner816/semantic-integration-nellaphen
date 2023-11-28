@@ -28,7 +28,7 @@ library(lmerTest)
 #Class Data imported
 
 ```{r}
-nellaphen_data = read_csv("semantic-integration-nellaphen (2).csv")
+nellaphen_data = read_csv("nellaphen_data_cleaned.csv")
 ```
 
 #Inspect data
@@ -65,10 +65,12 @@ nellaphen_data %>% group_by(sona_id) %>% count()
 attention_trial_data = nellaphen_data %>%
   filter(typeoftrial == 'attention')
 
+attention_trial_data$revised_correct = as.numeric(attention_trial_data$revised_correct)
+
 #What is the average accuracy in your experiment? What is the standard deviation of the accuracy?
 subject_acc = attention_trial_data %>%
   group_by(sona_id) %>%
-  summarize(mean_accuracy = mean(correct))
+  summarize(mean_accuracy = mean(revised_correct))
 
 ```
 
