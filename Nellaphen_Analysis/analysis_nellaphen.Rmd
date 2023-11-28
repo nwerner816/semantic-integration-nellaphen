@@ -93,4 +93,17 @@ ggplot(data = target_trial_data)+
 
 ```
 
+# Reaction Time by Subject/Condition
+
+```{r}
+#Calculate the average reaction time for each subject in each condition in your experiment.
+
+# This is not correct below -- but working on it
+
+subject_condition_rt = nellaphen_data %>%
+  group_by(sona_id, type, relatedness) %>%
+  summarize(mean_response_rt = mean(rt))
+
+```
+
 
