@@ -1,21 +1,82 @@
 ---
-title: "R Notebook"
+title: "Milestone 7_Analysis_Nellaphen"
 output: html_notebook
 editor_options: 
   chunk_output_type: inline
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
-
+#install packages
 ```{r}
-plot(cars)
+install.packages("tidyverse")
+install.packages("emmeans")
+install.packages("performance")
+install.packages("see")
+install.packages("patchwork")
+install.packages("lmerTest")
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+#load packages
+```{r}
+library(tidyverse)
+library(emmeans)
+library(performance)
+library(see)
+library(patchwork)
+library(lmerTest)
+```
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+#Class Data imported
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+#Inspect data
+```{r}
+#How many rows and columns are in your file?
+nrow(semantic_integration_nellaphen_2_)
+
+ncol(semantic_integration_nellaphen_2_)
+#10402 rows and 42 columns
+
+#How many unique “subjects” does this file have? How many trials did each subject do in this experiment?
+
+semantic_integration_nellaphen_2_ %>%
+  pull(sona_id) %>% unique() %>% length()
+
+semantic_integration_nellaphen_2_ %>% group_by(sona_id) %>% count()
+# 17 participants, each subject completed around 600 trials
+
+#Which columns contain your independent variable(s) and dependent variable(s)?
+
+# independent variable: *******
+#dependent variables: rt (response time)
+
+#How many levels do your independent variables have?
+#*************
+
+```
+
+
+# Basic descriptives
+```{r}
+NOT WORKING
+
+attention_trial_data = semantic_integration_nellaphen_2_ %>%
+  filter(typeoftrial == 'attention')
+
+#What is the average accuracy in your experiment? What is the standard deviation of the accuracy?
+subject_acc = attention_trial_data %>%
+  group_by(sona_id) %>%
+  summarize(mean_accuracy = mean(correct))
+
+```
+
+```{r}
+#What does the histogram of reaction times look like in your experiment for the critical trials?
+
+association_trial_data = semantic_integration_nellaphen_2_ %>%
+  filter(typeoftrial == 'association')
+
+ggplot(data = association_trial_data)+
+  geom_histogram(mapping = aes(x = as.numeric(rt)))
+
+```
+
 
