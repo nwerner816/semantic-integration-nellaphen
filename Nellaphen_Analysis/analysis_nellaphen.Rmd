@@ -2,7 +2,7 @@
 title: "Milestone 7_Analysis_Nellaphen"
 output: html_notebook
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 #install packages
@@ -56,7 +56,7 @@ semantic_integration_nellaphen_2_ %>% group_by(sona_id) %>% count()
 
 # Basic descriptives
 ```{r}
-NOT WORKING
+
 
 attention_trial_data = semantic_integration_nellaphen_2_ %>%
   filter(typeoftrial == 'attention')
