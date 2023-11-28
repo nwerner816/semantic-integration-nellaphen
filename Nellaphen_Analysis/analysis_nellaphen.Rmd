@@ -62,13 +62,16 @@ nellaphen_data %>% group_by(sona_id) %>% count()
 
 # Basic descriptives
 ```{r}
+#What is the average accuracy in your experiment? What is the standard deviation of the accuracy?
+mean_experiment_acc = attention_trial_data %>%
+  summarize(mean_accuracy = mean(revised_correct), sd_accuracy = sd(revised_correct))
 
 attention_trial_data = nellaphen_data %>%
   filter(typeoftrial == 'attention')
 
 attention_trial_data$revised_correct = as.numeric(attention_trial_data$revised_correct)
 
-#What is the average accuracy in your experiment? What is the standard deviation of the accuracy?
+#Calculate the mean accuracy for each subject
 subject_acc = attention_trial_data %>%
   group_by(sona_id) %>%
   summarize(mean_accuracy = mean(revised_correct))
@@ -81,7 +84,10 @@ subject_acc = attention_trial_data %>%
 association_trial_data = nellaphen_data %>%
   filter(typeoftrial == 'association')
 
-ggplot(data = association_trial_data)+
+target_trial_data = nellaphen_data %>%
+  filter(typeoftrial == 'target')
+
+ggplot(data = target_trial_data)+
   geom_histogram(mapping = aes(x = as.numeric(rt)))
 
 
