@@ -142,3 +142,20 @@ We seem to see little difference in rt for direct and shared primes, although bo
 For our alliteration IV, we see that participants in condition 2 (alliterative primes) have a slightly faster average rt than those in condition 1 (non-alliterative primes).
 
 # Inferential Statistics
+
+Our first research aim is to replicate the findings of Savic et al. surrounding prime words and learned word associations.
+
+Our second aim is to pursue the question of if alliterative prime words enhances learned prime psudoword and target word associations.
+
+```{r}
+## ANOVA for  Savic Replication
+target_rt = nellaphen_data %>%
+  filter(typeoftrial == 'target') %>%
+  mutate(rt = as.numeric(rt))
+
+savic_rt_model = lmer(data = target_rt,
+                rt ~ type*relatedness + (1|sona_id))
+summary(savic_rt_model)
+car::Anova(savic_rt_model)
+```
+
