@@ -31,38 +31,45 @@ library(lmerTest)
 nellaphen_data = read_csv("nellaphen_data_cleaned.csv")
 ```
 
-#Inspect data
+# Inspect data
+
+How many rows and columns are in your file?
 ```{r}
-#How many rows and columns are in your file?
+
 nrow(nellaphen_data)
 
 ncol(nellaphen_data)
-#10402 rows and 42 columns
 
-#How many unique “subjects” does this file have? How many trials did each subject do in this experiment?
+```
+10402 rows and 42 columns
 
+How many unique “subjects” does this file have? How many trials did each subject do in this experiment?
+
+```{r}
 nellaphen_data %>%
   pull(sona_id) %>% unique() %>% length()
 
 nellaphen_data %>% group_by(sona_id) %>% count()
-# 17 participants, each subject completed around 600 trials
-
-#Which columns contain your independent variable(s) and dependent variable(s)?
-
-# independent variable: type, relatedness, alliterative 
-#dependent variables: rt (response time)
-
-#How many levels do your independent variables have?
-#type: 2 (shared / direct / novel)
-#relatedness: 2 (related / unrelated) 
-#alliterative: 2 (alliterative [1] / non-alliterative [0])
-
 ```
+17 participants, each subject completed around 600 trials
+
+Which columns contain your independent variable(s) and dependent variable(s)?
+
+Independent variable: type, relatedness, alliterative 
+Dependent variables: rt (response time)
+
+How many levels do your independent variables have?
+
+type: 2 (shared / direct / novel)
+relatedness: 2 (related / unrelated) 
+alliterative: 2 (alliterative [1] / non-alliterative [0])
 
 
-# Basic descriptives
+# Basic Descriptives
+
+What is the average accuracy in your experiment? What is the standard deviation of the accuracy?
 ```{r}
-#What is the average accuracy in your experiment? What is the standard deviation of the accuracy?
+
 attention_trial_data = nellaphen_data %>%
   filter(typeoftrial == 'attention')
 
@@ -71,15 +78,19 @@ attention_trial_data$revised_correct = as.numeric(attention_trial_data$revised_c
 mean_experiment_acc = attention_trial_data %>%
   summarize(mean_accuracy = mean(revised_correct), sd_accuracy = sd(revised_correct))
 
-#Calculate the mean accuracy for each subject
+```
+
+Calculate the mean accuracy for each subject:
+
+```{r}
 subject_acc = attention_trial_data %>%
   group_by(sona_id) %>%
   summarize(mean_accuracy = mean(revised_correct))
-
 ```
 
+
+What does the histogram of reaction times look like in your experiment for the critical trials?
 ```{r}
-#What does the histogram of reaction times look like in your experiment for the critical trials?
 
 association_trial_data = nellaphen_data %>%
   filter(typeoftrial == 'association')
@@ -90,15 +101,10 @@ target_trial_data = nellaphen_data %>%
 ggplot(data = target_trial_data)+
   geom_histogram(mapping = aes(x = as.numeric(rt)))
 
-
 ```
 
-# Reaction Time by Subject/Condition
-
+Calculate the average reaction time for each subject in each condition in your experiment.
 ```{r}
-#Calculate the average reaction time for each subject in each condition in your experiment.
-
-# This is not correct below -- but working on it
 
 subject_condition_rt = nellaphen_data %>%
   filter(typeoftrial == 'target') %>%
@@ -108,7 +114,7 @@ subject_condition_rt = nellaphen_data %>%
 
 ```
 
-# Bar Plots for IVs
+Bar Plots for IVs:
 
 ```{r}
 ## prime type plot
@@ -137,6 +143,7 @@ ggplot(data = alliteration_rt) +
   labs(title = "plot of alliteration RTs", x = "Condition", y = "Mean RT (ms)")+
   scale_fill_grey()
 ```
+
 We seem to see little difference in rt for direct and shared primes, although both result in faster rts than novel words. Additionally, related words seem to result in faster rts than unrelated words.
 
 For our alliteration IV, we see that participants in condition 2 (alliterative primes) have a slightly faster average rt than those in condition 1 (non-alliterative primes).
@@ -157,5 +164,41 @@ savic_rt_model = lmer(data = target_rt,
                 rt ~ type*relatedness + (1|sona_id))
 summary(savic_rt_model)
 car::Anova(savic_rt_model)
+
+## repeat ANOVA including condition
+al_target_rt = nellaphen_data %>%
+  filter(typeoftrial == 'target') %>%
+  mutate(rt = as.numeric(rt))
+
+al_rt_model = lmer(data = al_target_rt,
+                rt ~ type + relatedness + condition + (1|sona_id))
+summary(al_rt_model)
+
+car::Anova(al_rt_model)
+
+#emmeans
+condition_model = (lm(data = nellaphen_data, rt ~ type + relatedness + type:relatedness))
+
+summary(condition_model)
+
+emmeans::emmeans(condition_model,
+                 pairwise ~ type | relatedness, adjust="tukey")
+
+## another method
+
+condition_comparison = nellaphen_data %>%
+  filter(relatedness == "related", type == "shared") %>%
+  group_by(type, relatedness, condition) %>%
+  mutate(rt = as.numeric(rt)) %>%
+  summarize(mean_rt = mean(rt))
+
+ggplot(data = condition_comparison) +
+  geom_col(mapping = aes(x = condition, y = mean_rt), position = "dodge") +
+  theme_bw()+
+  labs(title = "Comparison between alliteration and non-alliteration", x = "Condition", y = "Mean RT (ms)")+
+  scale_fill_grey()
+
+
+
 ```
 
