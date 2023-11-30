@@ -28,9 +28,21 @@ library(lmerTest)
 #Class Data imported
 
 ```{r}
-nellaphen_data = read_csv("nellaphen_data_cleaned.csv") %>%
-  mutate(condition = ifelse(condition == 1, "non-alliterative", "alliterative"))
+initial_data = read_csv("nellaphen_data_cleaned.csv") %>%
+  mutate(condition = ifelse(condition == 1, "non-alliterative", "alliterative"), rt = as.numeric(rt), condition = as.character(condition), revised_correct = as.numeric(correct))
 ```
+
+```{r}
+low_acc_IDs = initial_data %>%
+  filter(typeoftrial == 'attention') %>%
+  group_by(sona_id) %>%
+  summarize(id_mean_correct = mean(revised_correct)) %>%
+  filter(id_mean_correct < 0.75) %>% pull (sona_id)
+
+nellaphen_data = initial_data %>%
+  filter(!sona_id %in% low_acc_IDs)
+```
+
 
 # Inspect data
 
@@ -73,7 +85,7 @@ What is the average accuracy in your experiment? What is the standard deviation 
 
 attention_trial_data = nellaphen_data %>%
   filter(typeoftrial == 'attention')
-
+  
 attention_trial_data$revised_correct = as.numeric(attention_trial_data$revised_correct)
 
 mean_experiment_acc = attention_trial_data %>%
@@ -97,7 +109,7 @@ association_trial_data = nellaphen_data %>%
   filter(typeoftrial == 'association')
 
 target_trial_data = nellaphen_data %>%
-  filter(typeoftrial == 'target')
+  filter(typeoftrial == 'target', rt > 200, rt < 1500)
 
 ggplot(data = target_trial_data)+
   geom_histogram(mapping = aes(x = as.numeric(rt)))
@@ -108,8 +120,7 @@ Calculate the average reaction time for each subject in each condition in your e
 ```{r}
 
 subject_condition_rt = nellaphen_data %>%
-  filter(typeoftrial == 'target') %>%
-  mutate(rt = as.numeric(rt)) %>%
+  filter(typeoftrial == 'target', rt) %>%
   group_by(sona_id, type, relatedness) %>%
   summarize(mean_response_rt = mean(rt))
 
@@ -120,8 +131,7 @@ subject_condition_rt = nellaphen_data %>%
 ```{r}
 ## prime type plot
 prime_rt = nellaphen_data %>%
-  filter(typeoftrial == 'target') %>%
-  mutate(rt = as.numeric(rt)) %>%
+  filter(typeoftrial == 'target', rt > 200, rt < 1500) %>%
   group_by(type, relatedness) %>%
   summarize(mean_response_rt = mean(rt))
 
@@ -133,9 +143,8 @@ ggplot(data = prime_rt) +
 
 ## alliteration plot
 condition_comparison = nellaphen_data %>%
-  filter(typeoftrial == "target", type == "shared") %>%
+  filter(typeoftrial == "target", type == "shared", rt > 200, rt < 1500) %>%
   group_by(relatedness, condition) %>%
-  mutate(rt = as.numeric(rt), condition = as.character(condition)) %>%
   summarize(mean_rt = mean(rt))
 
 ggplot(data = condition_comparison) +
@@ -158,9 +167,8 @@ Our second aim is to pursue the question of if alliterative prime words enhances
 ```{r}
 ## alliterative condition comparison
 condition_comparison_id = nellaphen_data %>%
-  filter(typeoftrial == "target", type == "shared") %>%
+  filter(typeoftrial == "target", type == "shared", rt > 200, rt < 1500) %>%
   group_by(sona_id, relatedness, condition) %>%
-  mutate(rt = as.numeric(rt)) %>%
   summarize(mean_rt = mean(rt))
 comparison = lmer(data = condition_comparison_id, mean_rt ~ relatedness * condition + (1|sona_id))
 
