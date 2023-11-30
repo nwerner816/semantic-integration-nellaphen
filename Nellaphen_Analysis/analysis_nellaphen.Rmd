@@ -166,7 +166,7 @@ comparison = lmer(data = condition_comparison_id, mean_rt ~ relatedness * condit
 summary(comparison)
 car::Anova(comparison)
 performance::check_model(comparison)
-emmeans::emmeans(conmparison,
+emmeans::emmeans(comparison,
                  pairwise ~ relatedness | condition,
                  adjust="tukey")
 ```
