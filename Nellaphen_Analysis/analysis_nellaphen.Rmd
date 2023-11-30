@@ -114,7 +114,7 @@ subject_condition_rt = nellaphen_data %>%
 
 ```
 
-Bar Plots for IVs:
+#Bar Plots for IVs:
 
 ```{r}
 ## prime type plot
@@ -131,16 +131,16 @@ ggplot(data = prime_rt) +
   scale_fill_grey()
 
 ## alliteration plot
-alliteration_rt = nellaphen_data %>%
-  filter(typeoftrial == 'target', type == 'shared', relatedness == 'related') %>%
-  mutate(rt = as.numeric(rt), condition = as.character(condition)) %>%
-  group_by(condition) %>%
-  summarize(mean_response_rt = mean(rt))
+condition_comparison = nellaphen_data %>%
+  filter(typeoftrial == "target", type == "shared") %>%
+  group_by(relatedness, condition) %>%
+  mutate(rt = as.numeric(rt)) %>%
+  summarize(mean_rt = mean(rt))
 
-ggplot(data = alliteration_rt) +
-  geom_col(mapping = aes(x = condition, y = mean_response_rt), position = "dodge") +
+ggplot(data = condition_comparison) +
+  geom_col(mapping = aes(x = condition, y = mean_rt, fill = relatedness), position = "dodge") +
   theme_bw()+
-  labs(title = "plot of alliteration RTs", x = "Condition", y = "Mean RT (ms)")+
+  labs(title = "Comparison between alliteration and non-alliteration", x = "Condition", y = "Mean RT (ms)")+
   scale_fill_grey()
 ```
 
@@ -155,54 +155,20 @@ Our first research aim is to replicate the findings of Savic et al. surrounding 
 Our second aim is to pursue the question of if alliterative prime words enhances learned prime psudoword and target word associations.
 
 ```{r}
-## ANOVA for  Savic Replication
-target_rt = nellaphen_data %>%
-  filter(typeoftrial == 'target') %>%
-  mutate(rt = as.numeric(rt))
-
-savic_rt_model = lmer(data = target_rt,
-                rt ~ type*relatedness + (1|sona_id))
-summary(savic_rt_model)
-car::Anova(savic_rt_model)
-
-## repeat ANOVA including condition
-al_target_rt = nellaphen_data %>%
-  filter(typeoftrial == 'target') %>%
-  mutate(rt = as.numeric(rt))
-
-al_rt_model = lmer(data = al_target_rt,
-                rt ~ type + relatedness + condition + (1|sona_id))
-summary(al_rt_model)
-
-car::Anova(al_rt_model)
-
-#emmeans
-condition_model = (lm(data = nellaphen_data, rt ~ type + relatedness + type:relatedness))
-
-summary(condition_model)
-
-emmeans::emmeans(condition_model,
-                 pairwise ~ type | relatedness, adjust="tukey")
-
-## another method
-
-condition_comparison = nellaphen_data %>%
+## alliterative condition comparison
+condition_comparison_id = nellaphen_data %>%
   filter(typeoftrial == "target", type == "shared") %>%
-  group_by(relatedness, condition) %>%
+  group_by(sona_id, relatedness, condition) %>%
   mutate(rt = as.numeric(rt)) %>%
   summarize(mean_rt = mean(rt))
-
-ggplot(data = condition_comparison) +
-  geom_col(mapping = aes(x = condition, y = mean_rt, fill = relatedness), position = "dodge") +
-  theme_bw()+
-  labs(title = "Comparison between alliteration and non-alliteration", x = "Condition", y = "Mean RT (ms)")+
-  scale_fill_grey()
-```
-
-```{r}
-comparison = lm(data = condition_comparison, mean_rt ~ relatedness * condition)
+comparison = lmer(data = condition_comparison_id, mean_rt ~ relatedness * condition + (1|sona_id))
 
 summary(comparison)
+car::Anova(comparison)
+performance::check_model(comparison)
+emmeans::emmeans(conmparison,
+                 pairwise ~ relatedness | condition,
+                 adjust="tukey")
 ```
 
 
