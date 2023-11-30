@@ -28,19 +28,28 @@ library(lmerTest)
 #Class Data imported
 
 ```{r}
-initial_data = read_csv("nellaphen_data_cleaned.csv") %>%
-  mutate(condition = ifelse(condition == 1, "non-alliterative", "alliterative"), rt = as.numeric(rt), condition = as.character(condition), revised_correct = as.numeric(correct))
+initial_sona_data = read_csv("nellaphen_data_cleaned.csv") %>% 
+  select(-sona_id)
+
+initial_prolific_data1 = read_csv("prolific-semantic-integration-nellaphen (1).csv") %>% select(-view_history)
+
+initial_prolific_data2 = read_csv("prolific-semantic-integration-nellaphen-2.csv") %>% select(-view_history)
+
+nellaphen_data = rbind(initial_sona_data,initial_prolific_data1,
+                       initial_prolific_data2)
+
+  ##mutate(condition = ifelse(condition == 1, "non-alliterative", "alliterative"), rt = as.numeric(rt), condition = as.character(condition), revised_correct = as.numeric(correct))
 ```
 
 ```{r}
 low_acc_IDs = initial_data %>%
   filter(typeoftrial == 'attention') %>%
-  group_by(sona_id) %>%
+  group_by(ID) %>%
   summarize(id_mean_correct = mean(revised_correct)) %>%
-  filter(id_mean_correct < 0.75) %>% pull (sona_id)
+  filter(id_mean_correct < 0.75) %>% pull (ID)
 
 nellaphen_data = initial_data %>%
-  filter(!sona_id %in% low_acc_IDs)
+  filter(!ID %in% low_acc_IDs)
 ```
 
 
@@ -60,9 +69,9 @@ How many unique “subjects” does this file have? How many trials did each sub
 
 ```{r}
 nellaphen_data %>%
-  pull(sona_id) %>% unique() %>% length()
+  pull(ID) %>% unique() %>% length()
 
-nellaphen_data %>% group_by(sona_id) %>% count()
+nellaphen_data %>% group_by(ID) %>% count()
 ```
 17 participants, each subject completed around 600 trials
 
@@ -97,7 +106,7 @@ Calculate the mean accuracy for each subject:
 
 ```{r}
 subject_acc = attention_trial_data %>%
-  group_by(sona_id) %>%
+  group_by(ID) %>%
   summarize(mean_accuracy = mean(revised_correct))
 ```
 
@@ -121,7 +130,7 @@ Calculate the average reaction time for each subject in each condition in your e
 
 subject_condition_rt = nellaphen_data %>%
   filter(typeoftrial == 'target', rt) %>%
-  group_by(sona_id, type, relatedness) %>%
+  group_by(ID, type, relatedness) %>%
   summarize(mean_response_rt = mean(rt))
 
 ```
@@ -168,9 +177,9 @@ Our second aim is to pursue the question of if alliterative prime words enhances
 ## alliterative condition comparison
 condition_comparison_id = nellaphen_data %>%
   filter(typeoftrial == "target", type == "shared", rt > 200, rt < 1500) %>%
-  group_by(sona_id, relatedness, condition) %>%
+  group_by(ID, relatedness, condition) %>%
   summarize(mean_rt = mean(rt))
-comparison = lmer(data = condition_comparison_id, mean_rt ~ relatedness * condition + (1|sona_id))
+comparison = lmer(data = condition_comparison_id, mean_rt ~ relatedness * condition + (1|ID))
 
 summary(comparison)
 car::Anova(comparison)
