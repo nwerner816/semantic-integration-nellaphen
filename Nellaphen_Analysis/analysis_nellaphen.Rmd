@@ -134,7 +134,7 @@ ggplot(data = prime_rt) +
 condition_comparison = nellaphen_data %>%
   filter(typeoftrial == "target", type == "shared") %>%
   group_by(relatedness, condition) %>%
-  mutate(rt = as.numeric(rt)) %>%
+  mutate(rt = as.numeric(rt), condition = as.character(condition)) %>%
   summarize(mean_rt = mean(rt))
 
 ggplot(data = condition_comparison) +
