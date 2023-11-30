@@ -28,7 +28,8 @@ library(lmerTest)
 #Class Data imported
 
 ```{r}
-nellaphen_data = read_csv("nellaphen_data_cleaned.csv")
+nellaphen_data = read_csv("nellaphen_data_cleaned.csv") %>%
+  mutate(condition = ifelse(condition == 1, "non-alliterative", "alliterative"))
 ```
 
 # Inspect data
