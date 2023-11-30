@@ -7,12 +7,12 @@ editor_options:
 
 #install packages
 ```{r}
-install.packages("tidyverse")
-install.packages("emmeans")
-install.packages("performance")
-install.packages("see")
-install.packages("patchwork")
-install.packages("lmerTest")
+#install.packages("tidyverse")
+#install.packages("emmeans")
+#install.packages("performance")
+#install.packages("see")
+#install.packages("patchwork")
+#install.packages("lmerTest")
 ```
 
 #load packages
@@ -187,18 +187,15 @@ emmeans::emmeans(condition_model,
 ## another method
 
 condition_comparison = nellaphen_data %>%
-  filter(relatedness == "related", type == "shared") %>%
-  group_by(type, relatedness, condition) %>%
+  filter(typeoftrial == "target", type == "shared") %>%
+  group_by(relatedness, condition) %>%
   mutate(rt = as.numeric(rt)) %>%
   summarize(mean_rt = mean(rt))
 
 ggplot(data = condition_comparison) +
-  geom_col(mapping = aes(x = condition, y = mean_rt), position = "dodge") +
+  geom_col(mapping = aes(x = condition, y = mean_rt, fill = relatedness), position = "dodge") +
   theme_bw()+
   labs(title = "Comparison between alliteration and non-alliteration", x = "Condition", y = "Mean RT (ms)")+
   scale_fill_grey()
-
-
-
 ```
 
