@@ -199,3 +199,10 @@ ggplot(data = condition_comparison) +
   scale_fill_grey()
 ```
 
+```{r}
+comparison = lm(data = condition_comparison, mean_rt ~ relatedness * condition)
+
+summary(comparison)
+```
+
+
