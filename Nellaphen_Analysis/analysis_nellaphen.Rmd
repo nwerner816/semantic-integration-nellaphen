@@ -28,20 +28,22 @@ library(lmerTest)
 #Class Data imported
 
 ```{r}
-initial_sona_data = read_csv("nellaphen_data_cleaned.csv") %>% 
+initial_sona_data = read_csv("sona_data_nellaphen.csv") %>% 
   select(-sona_id)
 
-initial_prolific_data1 = read_csv("prolific-semantic-integration-nellaphen (1).csv") %>% select(-view_history)
+initial_prolific_data1 = read_csv("prolific_data_nellaphen_1.csv")
 
-initial_prolific_data2 = read_csv("prolific-semantic-integration-nellaphen-2.csv") %>% select(-view_history)
+initial_prolific_data2 = read_csv("prolific_data_nellaphen_2.csv")
 
 nellaphen_data = rbind(initial_sona_data,initial_prolific_data1,
-                       initial_prolific_data2)
-
-  ##mutate(condition = ifelse(condition == 1, "non-alliterative", "alliterative"), rt = as.numeric(rt), condition = as.character(condition), revised_correct = as.numeric(correct))
+                       initial_prolific_data2) %>%
+mutate(condition = ifelse(condition == 1, "non-alliterative", "alliterative"), rt = as.numeric(rt), condition = as.character(condition), revised_correct = as.numeric(correct))
 ```
 
 ```{r}
+incomplete_IDs = initial_data %>%
+  filter(typeoftrial == 'demo_age_gender_edu') %>% pull (ID)
+
 low_acc_IDs = initial_data %>%
   filter(typeoftrial == 'attention') %>%
   group_by(ID) %>%
@@ -49,7 +51,8 @@ low_acc_IDs = initial_data %>%
   filter(id_mean_correct < 0.75) %>% pull (ID)
 
 nellaphen_data = initial_data %>%
-  filter(!ID %in% low_acc_IDs)
+  filter(!ID %in% low_acc_IDs) %>%
+  filter(ID %in% incomplete_IDs)
 ```
 
 
@@ -129,7 +132,7 @@ Calculate the average reaction time for each subject in each condition in your e
 ```{r}
 
 subject_condition_rt = nellaphen_data %>%
-  filter(typeoftrial == 'target', rt) %>%
+  filter(typeoftrial == 'target', rt > 200, rt < 1500) %>%
   group_by(ID, type, relatedness) %>%
   summarize(mean_response_rt = mean(rt))
 
@@ -154,13 +157,15 @@ ggplot(data = prime_rt) +
 condition_comparison = nellaphen_data %>%
   filter(typeoftrial == "target", type == "shared", rt > 200, rt < 1500) %>%
   group_by(relatedness, condition) %>%
-  summarize(mean_rt = mean(rt))
+  summarize(mean_rt = mean(rt), sd_rt = sd(rt))
 
-ggplot(data = condition_comparison) +
-  geom_col(mapping = aes(x = condition, y = mean_rt, fill = relatedness), position = "dodge") +
-  theme_bw()+
-  labs(title = "Comparison between alliteration and non-alliteration", x = "Condition", y = "Mean RT (ms)")+
-  scale_fill_grey()
+ggplot(data = condition_comparison, mapping = aes(x = condition, y = mean_rt, fill = relatedness))+
+  geom_col(position = "dodge") +
+  geom_errorbar(aes(ymin = mean_rt-sd_rt,
+                    ymax = mean_rt+sd_rt),
+                width = 0.25,
+                position = position_dodge(width=0.9)) +
+  labs(title = "Comparison between alliteration and non-alliteration", x = "Condition", y = "Mean RT (ms)")
 ```
 
 We seem to see little difference in rt for direct and shared primes, although both result in faster rts than novel words. Additionally, related words seem to result in faster rts than unrelated words.
@@ -178,7 +183,7 @@ Our second aim is to pursue the question of if alliterative prime words enhances
 condition_comparison_id = nellaphen_data %>%
   filter(typeoftrial == "target", type == "shared", rt > 200, rt < 1500) %>%
   group_by(ID, relatedness, condition) %>%
-  summarize(mean_rt = mean(rt))
+  summarize(mean_rt = mean(rt),)
 comparison = lmer(data = condition_comparison_id, mean_rt ~ relatedness * condition + (1|ID))
 
 summary(comparison)
