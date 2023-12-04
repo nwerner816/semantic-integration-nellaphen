@@ -41,7 +41,7 @@ mutate(condition = ifelse(condition == 1, "non-alliterative", "alliterative"), r
 ```
 
 ```{r}
-incomplete_IDs = initial_data %>%
+complete_IDs = initial_data %>%
   filter(typeoftrial == 'demo_age_gender_edu') %>% pull (ID)
 
 low_acc_IDs = initial_data %>%
@@ -52,7 +52,7 @@ low_acc_IDs = initial_data %>%
 
 nellaphen_data = initial_data %>%
   filter(!ID %in% low_acc_IDs) %>%
-  filter(!ID %in% incomplete_IDs)
+  filter(ID %in% complete_IDs)
 ```
 
 
