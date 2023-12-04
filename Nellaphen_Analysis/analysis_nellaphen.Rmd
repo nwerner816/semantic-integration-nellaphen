@@ -50,9 +50,15 @@ low_acc_IDs = initial_data %>%
   summarize(id_mean_correct = mean(revised_correct)) %>%
   filter(id_mean_correct < 0.75) %>% pull (ID)
 
+incorrect_trial_IDs = initial_data %>%
+  filter(typeoftrial == 'target') %>%
+  filter(revised_correct == 0) %>% pull (ID)
+
 nellaphen_data = initial_data %>%
   filter(!ID %in% low_acc_IDs) %>%
-  filter(ID %in% complete_IDs)
+  filter(ID %in% complete_IDs) %>%
+  filter(!ID %in% incorrect_trial_IDs)
+
 ```
 
 
