@@ -37,7 +37,7 @@ initial_prolific_data2 = read_csv("prolific_data_nellaphen_2.csv")
 
 initial_data = rbind(initial_sona_data,initial_prolific_data1,
                        initial_prolific_data2) %>%
-mutate(condition = ifelse(condition == 1, "non-alliterative", "alliterative"), rt = as.numeric(rt), condition = as.character(condition), revised_correct = as.numeric(correct))
+mutate(rt = as.numeric(rt), condition = as.character(condition), revised_correct = as.numeric(correct))
 ```
 
 ```{r}
@@ -142,31 +142,22 @@ subject_condition_rt = nellaphen_data %>%
 #Bar Plots for IVs:
 
 ```{r}
-## prime type plot
-prime_rt = nellaphen_data %>%
-  filter(typeoftrial == 'target', rt > 200, rt < 1500) %>%
-  group_by(type, relatedness) %>%
-  summarize(mean_response_rt = mean(rt))
-
-ggplot(data = prime_rt) +
-  geom_col(mapping = aes(x = type, y = mean_response_rt, fill = relatedness), position = "dodge") +
-  theme_bw()+
-  labs(title = "plot of RTs", x = "Prime", y = "Mean RT (ms)")+
-  scale_fill_grey()
-
-## alliteration plot
-condition_comparison = nellaphen_data %>%
-  filter(typeoftrial == "target", type == "shared", rt > 200, rt < 1500) %>%
-  group_by(relatedness, condition) %>%
+## Condition plot
+condition_1_2_comparison = nellaphen_data %>%
+  filter(!is.na(type)) %>%
+  filter(rt > 200, rt < 1500, type != 'novel') %>% 
+  group_by(condition, type, relatedness) %>%
   summarize(mean_rt = mean(rt), se_rt = sd(rt) / sqrt(length(rt)))
 
-ggplot(data = condition_comparison, mapping = aes(x = condition, y = mean_rt, fill = relatedness))+
+ggplot(data = condition_1_2_comparison, 
+       mapping = aes(x = type, y = mean_rt, fill = relatedness))+
   geom_col(position = "dodge") +
+  facet_wrap(~condition) +
   geom_errorbar(aes(ymin = mean_rt-se_rt,
                     ymax = mean_rt+se_rt),
                 width = 0.25,
                 position = position_dodge(width=0.9)) +
-  labs(title = "Comparison between alliteration and non-alliteration", x = "Condition", y = "Mean RT (ms)")
+  labs(title = "Comparison of RTs across conditions", x = "prime type", y = "Mean RT (ms)")
 ```
 
 We seem to see little difference in rt for direct and shared primes, although both result in faster rts than novel words. Additionally, related words seem to result in faster rts than unrelated words.
