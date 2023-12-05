@@ -90,6 +90,17 @@ type: 2 (shared / direct / novel)
 relatedness: 2 (related / unrelated) 
 alliterative: 2 (alliterative [1] / non-alliterative [0])
 
+# Number of Participants in each condition
+```{r}
+condition_1_IDs = nellaphen_data %>%
+  filter(condition == '1') %>%
+  pull(ID) %>% unique() %>% length()
+
+condition_2_IDs = nellaphen_data %>%
+  filter(condition == '2') %>%
+  pull(ID) %>% unique() %>% length()
+```
+
 
 # Basic Descriptives
 
