@@ -173,16 +173,17 @@ Our second aim is to pursue the question of if alliterative prime words enhances
 ```{r}
 ## alliterative condition comparison
 condition_comparison_id = nellaphen_data %>%
-  filter(typeoftrial == "target", type == "shared", rt > 200, rt < 1500) %>%
-  group_by(ID, relatedness, condition) %>%
-  summarize(mean_rt = mean(rt),)
-comparison = lmer(data = condition_comparison_id, mean_rt ~ relatedness * condition + (1|ID))
+  filter(typeoftrial == "target", type %in% c("shared", "direct"), rt > 200, rt < 1500) %>%
+  mutate(condition = as.factor(condition), relatedness = as.factor(relatedness), type = as.factor(type))
+
+
+comparison = lmer(data = condition_comparison_id, rt ~ relatedness * type * condition + (1|ID))
 
 summary(comparison)
 car::Anova(comparison)
 performance::check_model(comparison)
 emmeans::emmeans(comparison,
-                 pairwise ~ relatedness | condition,
+                 pairwise ~ relatedness | type | condition,
                  adjust="tukey")
 ```
 
