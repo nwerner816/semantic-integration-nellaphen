@@ -160,6 +160,12 @@ ggplot(data = condition_1_2_comparison,
   labs(title = "Comparison of RTs across conditions", x = "prime type", y = "Mean RT (ms)")
 ```
 
+#how many participants in each condition?
+```{r}
+
+```
+
+
 We seem to see little difference in rt for direct and shared primes, although both result in faster rts than novel words. Additionally, related words seem to result in faster rts than unrelated words.
 
 For our alliteration IV, we see that participants in condition 2 (alliterative primes) have a slightly faster average rt than those in condition 1 (non-alliterative primes).
