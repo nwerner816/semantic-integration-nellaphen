@@ -41,6 +41,16 @@ mutate(rt = as.numeric(rt), condition = as.character(condition), revised_correct
 ```
 
 ```{r}
+  condition_1_IDs = initial_data %>%
+  filter(condition == '1') %>%
+  pull(ID) %>% unique() %>% length()
+
+condition_2_IDs = initial_data %>%
+  filter(condition == '2') %>%
+  pull(ID) %>% unique() %>% length()
+```
+
+```{r}
 complete_IDs = initial_data %>%
   filter(typeoftrial == 'demo_age_gender_edu') %>% pull (ID)
 
