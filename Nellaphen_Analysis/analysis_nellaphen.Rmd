@@ -35,8 +35,10 @@ initial_prolific_data1 = read_csv("prolific_data_nellaphen_1.csv")
 
 initial_prolific_data2 = read_csv("prolific_data_nellaphen_2.csv")
 
+initial_prolific_data3 = read_csv("prolific_data_nellaphen_3.csv")
+
 initial_data = rbind(initial_sona_data,initial_prolific_data1,
-                       initial_prolific_data2) %>%
+                       initial_prolific_data2, initial_prolific_data3) %>%
 mutate(rt = as.numeric(rt), condition = as.character(condition), revised_correct = as.numeric(correct))
 ```
 
