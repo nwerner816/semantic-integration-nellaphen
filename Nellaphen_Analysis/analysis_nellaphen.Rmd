@@ -42,6 +42,17 @@ initial_data = rbind(initial_sona_data,initial_prolific_data1,
 mutate(rt = as.numeric(rt), condition = as.character(condition), revised_correct = as.numeric(correct))
 ```
 
+
+```{r}
+condition_1_IDs_sona = initial_sona_data %>%
+  filter(condition == '1') %>%
+  pull(ID) %>% unique() %>% length()
+
+condition_2_IDs_sona = initial_sona_data %>%
+  filter(condition == '2') %>%
+  pull(ID) %>% unique() %>% length()
+```
+
 ```{r}
   condition_1_IDs = initial_data %>%
   filter(condition == '1') %>%
